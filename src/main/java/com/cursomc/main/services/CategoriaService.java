@@ -17,10 +17,12 @@ public class CategoriaService {
 
 	public Categoria buscar(Integer id) {
 		Optional<Categoria> obj = repo.findById(id);
-//		if(obj.get() == null) {
-//			throw new ObjectNotFoundException("Objeto não encontrado, id:"+id+" Tipo: "+Categoria.class.getName());
-//		}
-//		else
 		return obj.orElseThrow(()-> new ObjectNotFoundException("Objeto não encontrado, id:"+id+" Tipo: "+Categoria.class.getName()));
 	}
+	
+	public Categoria insert(Categoria obj) {
+		obj.setId(null);
+		return repo.save(obj);
+	}
+	
 }
