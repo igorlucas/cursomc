@@ -5,12 +5,16 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.cursomc.main.domain.Categoria;
 import com.cursomc.main.repositories.CategoriaRepository;
 import com.cursomc.main.services.exceptios.DataIntegrityException;
 import com.cursomc.main.services.exceptios.ObjectNotFoundException;
+
 
 @Service
 public class CategoriaService {
@@ -25,9 +29,6 @@ public class CategoriaService {
 	}
 
 	public List<Categoria> findAll() {
-		// Optional<Categoria> obj = repo.findAll();
-		// return obj.orElseThrow(()-> new ObjectNotFoundException("Objeto não
-		// encontrado, id:"+id+" Tipo: "+Categoria.class.getName()));
 		return repo.findAll();
 
 	}
@@ -50,6 +51,11 @@ public class CategoriaService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possível excluir uma categoria que possue produto");
 		}
+	}
+
+	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String direction, String orderBy) {
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		return repo.findAll(pageRequest);
 	}
 
 }
